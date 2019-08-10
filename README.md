@@ -1,6 +1,4 @@
-# tidytuesdayrocks
-An interactive catalogue of #TidyTuesday tweets from 2018.
+# #CityHallSelfie Day
+An interactive catalog of #CityHallSelfie Day tweets.
 
-See it in action at [https://nsgrantham.shinyapps.io/tidytuesdayrocks](https://nsgrantham.shinyapps.io/tidytuesdayrocks).
-
-Happy plotting!
+Link to be posted soon!
