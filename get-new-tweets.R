@@ -25,7 +25,7 @@ next_page_id <- NULL
 more_pages <- TRUE
 while (more_pages) {
   cat(paste("Getting page", page_number, "...\n"))
-  post_data <- paste0("-d '{\"query\":\"#tidytuesday\",\"fromDate\":\"", from_date, "\",\"toDate\":\"", to_date, "\"")
+  post_data <- paste0("-d '{\"query\":\"#cityhallselfie\",\"fromDate\":\"", from_date, "\",\"toDate\":\"", to_date, "\"")
   if (!is.null(next_page_id)) {
     post_data <- paste0(post_data, ", \"next\":\"", next_page_id, "\"")
   }

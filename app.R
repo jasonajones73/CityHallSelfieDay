@@ -17,7 +17,7 @@ ui <- fluidPage(
   fluidRow(
     column(1),
     column(4,
-      h2("tidytuesday.rocks"),
+      h2("#CityHallSelfie Day"),
       HTML(paste("<p><a href='https://github.com/rfordatascience/tidytuesday'>Tidy Tuesday</a>",
                  "is a weekly social data project in <a href='https://www.r-project.org/'>R</a>.",
                  "Every week <a href='https://twitter.com/thomas_mock'>@thomas_mock</a> and",
@@ -39,8 +39,9 @@ ui <- fluidPage(
                     selected = base::sample(c("Most recent", "Most likes", "Most retweets"), 1)))
     ),
     column(6,
-      h2(textOutput('dataset_name')),
-      p(uiOutput('dataset_links')), 
+      h2(img(src = "https://storage.googleapis.com/proudcity/elgl/uploads/2019/07/city-hall-selfie.png",
+             height = "150px"),
+         img(src = "https://storage.googleapis.com/proudcity/elgl/uploads/2019/07/logo-hi-1-300x106.png")),
       h3(textOutput('tweets_sorted_by')),
       uiOutput('tweets')
     ),
