@@ -5,6 +5,7 @@
 # Packages ----
 library(tidyverse)
 library(rtweet)
+library(googledrive)
 
 # Search Tweets ----
 tweets <- search_tweets(q = "#CityHallSelfie",
@@ -31,7 +32,7 @@ clean_tweets %>%
   write_tsv(file.path("data", "tweets_master.tsv"), append = TRUE)
 
 # Extract photo endpoints ----
-photos <- tweets %>%
+photos <- new_tweets %>%
   unnest(ext_media_url) %>%
   mutate(file_name = paste0(status_id, ".png")) %>%
   filter(is.na(ext_media_url) != TRUE) %>%
@@ -43,6 +44,15 @@ for (i in seq_along(photos$file_name)) {
                 destfile = here::here(paste0("photos/", photos$status_id[i],
                                              i, ".", photos$file_type[i])))
 }
+
+# # List all of the local files ----
+# local_files <- tibble(file_names = list.files(here::here("photos"))) %>%
+#   mutate(file_names = paste0("photos/", file_names)) %>%
+#   .$file_names
+# 
+# # Bulk upload to Google Drive ----
+# map(local_files, ~drive_upload(.x, path = "City Hall Selfie Day/2019/",
+#                                verbose = TRUE))
 
 
 
