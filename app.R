@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyalert)
 library(dplyr)
 library(purrr)
 library(readr)
@@ -18,18 +19,19 @@ ui <- navbarPage(
   tabPanel("Home",
   
   fluidPage(
-  tags$head(HTML('<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">')),
-  tags$head(HTML('<style>* {font-size: 100%; font-family: Roboto Mono;}</style>')),
-  tags$head(HTML('<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>')),
-  tags$head(HTML('<style>
-    .navbar {
-    background-color: #3b8540 !important;
-    }
+    useShinyalert(),
+    tags$head(HTML('<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">')),
+    tags$head(HTML('<style>* {font-size: 100%; font-family: Roboto Mono;}</style>')),
+    tags$head(HTML('<script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>')),
+    tags$head(HTML('<style>
+      .navbar {
+      background-color: #3b8540 !important;
+      }
     
-    .navbar-nav a {
-    background-color: #3b8540 !important;
-    color: white !important;
-    }
+      .navbar-nav a {
+      background-color: #3b8540 !important;
+      color: white !important;
+      }
                  </style>')),
   
   fluidRow(
@@ -77,6 +79,27 @@ embed_tweet <- function(tweet) {
 
 
 server <- function(input, output, session) {
+  
+  shinyalert(
+    title = "WELCOME",
+    text = "This application collects and organizes #CityHallSelfie Day tweets
+    for your viewing pleasure!
+    <br> <br> Don't forget to also check out <a href='https://elglengagementcorner.org/cityhallselfieday' target='_blank'>The ELGL 
+    Engagement Corner</a>",
+    closeOnEsc = TRUE,
+    closeOnClickOutside = FALSE,
+    html = TRUE,
+    type = "success",
+    showConfirmButton = TRUE,
+    showCancelButton = FALSE,
+    confirmButtonText = "OK",
+    confirmButtonCol = "#3b8540",
+    timer = 0,
+    imageUrl = "https://storage.googleapis.com/proudcity/elgl/uploads/2019/07/city-hall-selfie.png",
+    imageWidth = 150,
+    imageHeight = 150,
+    animation = TRUE
+  )
   
   
   sorted_tweets <- reactive({
