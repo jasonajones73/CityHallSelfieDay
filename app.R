@@ -13,6 +13,7 @@ ui <- navbarPage(
   fluid = TRUE,
   windowTitle = "#CityHallSelfie Day",
   position = "fixed-top",
+  collapsible = TRUE,
             
   tabPanel("Home",
   
@@ -55,16 +56,18 @@ ui <- navbarPage(
       HTML(paste("<p>#CityHallSelfie Day is managed by ELGL, the Engaging Local Government Leaders network. 
                  ELGL is a professional association of 4,800 people who work for and with local government.</p>")),
       tags$blockquote("ELGL’s mission is to engage the brightest minds in local government. 
-                      In 2019, ELGL and Bang the Table are partnering to produce #CityHallSelfie day.")
+                      In 2019, ELGL and Bang the Table are partnering to produce #CityHallSelfie day."),
+      HTML(paste("<p>Also be sure to check out the <a href='https://elglengagementcorner.org/cityhallselfieday'
+                 >ELGL Engagement Corner</a>"))
     ),
     column(6,
       h3(textOutput('tweets_sorted_by')),
       uiOutput('tweets')
     ),
     column(1)
+    )
   )
-)
-)
+  )
 )
 
 embed_tweet <- function(tweet) {
