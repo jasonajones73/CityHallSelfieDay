@@ -5,12 +5,39 @@ library(readr)
 library(stringr)
 library(magrittr)
 
-tweets <- read_tsv(file.path("data", "tweets.tsv"))
+tweets <- read_tsv(file.path("data", "tweets_master.tsv"))
 
-ui <- fluidPage(
+ui <- navbarPage(
+  title = img(src = "https://storage.googleapis.com/proudcity/elgl/uploads/2019/07/elgl-logo-189x64.png",
+              height = "100%"),
+  fluid = TRUE,
+  windowTitle = "#CityHallSelfie Day",
+  position = "fixed-top",
+            
+  tabPanel("Home",
+  
+  fluidPage(
   tags$head(HTML('<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">')),
   tags$head(HTML('<style>* {font-size: 100%; font-family: Roboto Mono;}</style>')),
   tags$head(HTML('<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>')),
+  tags$head(HTML('<style>
+    .navbar {
+    background-color: #3b8540 !important;
+    }
+    
+    .navbar-nav a {
+    background-color: #3b8540 !important;
+    color: white !important;
+    }
+                 </style>')),
+  
+  fluidRow(
+    column(12,
+           br(),
+           br(),
+           br())
+  ),
+  
   fluidRow(
     column(1),
     column(4,
@@ -36,6 +63,8 @@ ui <- fluidPage(
     ),
     column(1)
   )
+)
+)
 )
 
 embed_tweet <- function(tweet) {
