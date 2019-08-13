@@ -31,7 +31,7 @@ clean_tweets %>%
   write_tsv(file.path("data", "tweets_master.tsv"), append = TRUE)
 
 # Extract photo endpoints ----
-photos <- new_tweets %>%
+photos <- tweets %>%
   unnest(ext_media_url) %>%
   mutate(file_name = paste0(status_id, ".png")) %>%
   filter(is.na(ext_media_url) != TRUE) %>%
@@ -41,7 +41,7 @@ photos <- new_tweets %>%
 for (i in seq_along(photos$file_name)) {
   download.file(url = photos$ext_media_url[i],
                 destfile = here::here(paste0("photos/", photos$status_id[i],
-                                             ".", photos$file_type[i])))
+                                             i, ".", photos$file_type[i])))
 }
 
 
