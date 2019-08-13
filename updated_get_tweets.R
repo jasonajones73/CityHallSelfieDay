@@ -46,10 +46,10 @@ for (i in seq_along(photos$file_name)) {
 }
 
 # # List all of the local files ----
-# local_files <- tibble(file_names = list.files(here::here("photos"))) %>%
-#   mutate(file_names = paste0("photos/", file_names)) %>%
-#   .$file_names
-# 
+#local_files <- tibble(file_names = list.files(here::here("photos"))) %>%
+#  mutate(file_names = paste0("photos/", file_names)) %>%
+#  .$file_names
+ 
 # # Bulk upload to Google Drive ----
 # map(local_files, ~drive_upload(.x, path = "City Hall Selfie Day/2019/",
 #                                verbose = TRUE))
