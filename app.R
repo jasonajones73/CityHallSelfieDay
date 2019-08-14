@@ -8,9 +8,7 @@ library(stringr)
 library(magrittr)
 
 # Load data
-tweets <- read_tsv(file.path("data", "tweets_master.tsv")) %>%
-  dplyr::arrange(desc(created_at)) %>%
-  .[1:200,]
+tweets <- read_tsv(file.path("data", "tweets_master.tsv"))
 
 # Generate UI
 ui <- navbarPage(
@@ -97,8 +95,7 @@ server <- function(input, output, session) {
   
   shinyalert(
     title = "Welcome!",
-    text = "<p>This application collects and displays the most recent 200
-    #CityHallSelfie Day Tweets.</p>
+    text = "<p>This application collects and displays #CityHallSelfie Day Tweets.</p>
     <p>Also check out <a href='https://elglengagementcorner.org/cityhallselfieday' target='_blank'>
     The ELGL Engagment Corner</a>",
     closeOnEsc = TRUE,
@@ -118,9 +115,9 @@ server <- function(input, output, session) {
 
   sorted_tweets <- reactive({
     switch(input$sort_by,
-           "Most recent"   = tweets %>% arrange(desc(created_at)),
-           "Most likes"    = tweets %>% arrange(desc(favorite_count)),
-           "Most retweets" = tweets %>% arrange(desc(retweet_count)))
+           "Most recent"   = tweets %>% arrange(desc(created_at)) %>% .[1:50, ],
+           "Most likes"    = tweets %>% arrange(desc(favorite_count)) %>% .[1:50, ],
+           "Most retweets" = tweets %>% arrange(desc(retweet_count)) %>% .[1:50, ])
   })
   
   output$tweets_sorted_by <- reactive({paste("Tweets sorted by", tolower(input$sort_by))})

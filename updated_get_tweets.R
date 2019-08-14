@@ -31,6 +31,13 @@ clean_tweets <- new_tweets %>%
 clean_tweets %>%
   write_tsv(file.path("data", "tweets_master.tsv"), append = TRUE)
 
+# Managing large historical tweet data for analysis
+old_large_tweets <- read_rds("data/large_tweets.rds")
+
+new_tweets %>%
+  rbind(old_large_tweets) %>%
+  saveRDS(file = "data/large_tweets.rds")
+
 # Extract photo endpoints ----
 photos <- new_tweets %>%
   unnest(ext_media_url) %>%
