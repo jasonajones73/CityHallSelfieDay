@@ -66,7 +66,14 @@ ui <- navbarPage(
       tags$blockquote("ELGL’s mission is to engage the brightest minds in local government. 
                       In 2019, ELGL and Bang the Table are partnering to produce #CityHallSelfie day."),
       HTML(paste("<p>Also be sure to check out the <a href='https://elglengagementcorner.org/cityhallselfieday'
-                 >ELGL Engagement Corner</a>"))
+                 >ELGL Engagement Corner</a>")),
+      tags$br(),
+      tags$br(),
+      HTML("<a href='https://twitter.com/intent/tweet?button_hashtag=CityHallSelfie&ref_src=twsrc%5Etfw' class='twitter-hashtag-button' data-size='large' data-show-count='true'>Tweet #CityHallSelfie</a>"),
+      tags$br(),
+      HTML("<a href='https://twitter.com/ELGL50?ref_src=twsrc%5Etfw' class='twitter-follow-button' data-size='large' data-show-count='false'>Follow @ELGL50</a>"),
+      tags$br(),
+      HTML("<a href='https://twitter.com/BangtheTable?ref_src=twsrc%5Etfw' class='twitter-follow-button' data-size='large' data-show-count='false'>Follow @BangtheTable</a>")
     ),
     column(6,
       h3(textOutput('tweets_sorted_by')),
@@ -95,7 +102,7 @@ server <- function(input, output, session) {
     <p>Also check out <a href='https://elglengagementcorner.org/cityhallselfieday' target='_blank'>
     The ELGL Engagment Corner</a>",
     closeOnEsc = TRUE,
-    closeOnClickOutside = FALSE,
+    closeOnClickOutside = TRUE,
     html = TRUE,
     type = "success",
     showConfirmButton = TRUE,
