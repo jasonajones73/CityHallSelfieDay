@@ -1,3 +1,4 @@
+# Load packages 
 library(shiny)
 library(shinyalert)
 library(dplyr)
@@ -6,8 +7,12 @@ library(readr)
 library(stringr)
 library(magrittr)
 
-tweets <- read_tsv(file.path("data", "tweets_master.tsv"))
+# Load data
+tweets <- read_tsv(file.path("data", "tweets_master.tsv")) %>%
+  dplyr::arrange(desc(created_at)) %>%
+  .[1:200,]
 
+# Generate UI
 ui <- navbarPage(
   title = img(src = "https://storage.googleapis.com/proudcity/elgl/uploads/2019/07/elgl-logo-189x64.png",
               height = "100%"),
@@ -16,13 +21,14 @@ ui <- navbarPage(
   position = "fixed-top",
   collapsible = TRUE,
             
-  tabPanel("Home",
+  tabPanel(title = "Home",
+           
+           useShinyalert(),
   
   fluidPage(
-    useShinyalert(),
     tags$head(HTML('<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">')),
     tags$head(HTML('<style>* {font-size: 100%; font-family: Roboto Mono;}</style>')),
-    tags$head(HTML('<script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>')),
+    tags$head(HTML('<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>')),
     tags$head(HTML('<style>
       .navbar {
       background-color: #3b8540 !important;
@@ -73,7 +79,9 @@ ui <- navbarPage(
 )
 
 embed_tweet <- function(tweet) {
-  tags$blockquote(class = "twitter-tweet", tags$a(href = tweet$status_url))
+  tags$blockquote(class="twitter-tweet", `data-theme`="dark",
+                  `data-link-color`="#3b8540",
+                  tags$a(href = tweet$status_url))
 }
 
 
@@ -81,11 +89,11 @@ embed_tweet <- function(tweet) {
 server <- function(input, output, session) {
   
   shinyalert(
-    title = "WELCOME",
-    text = "This application collects and organizes #CityHallSelfie Day tweets
-    for your viewing pleasure!
-    <br> <br> Don't forget to also check out <a href='https://elglengagementcorner.org/cityhallselfieday' target='_blank'>The ELGL 
-    Engagement Corner</a>",
+    title = "Welcome!",
+    text = "<p>This application collects and displays the most recent 200
+    #CityHallSelfie Day Tweets.</p>
+    <p>Also check out <a href='https://elglengagementcorner.org/cityhallselfieday' target='_blank'>
+    The ELGL Engagment Corner</a>",
     closeOnEsc = TRUE,
     closeOnClickOutside = FALSE,
     html = TRUE,
@@ -93,15 +101,14 @@ server <- function(input, output, session) {
     showConfirmButton = TRUE,
     showCancelButton = FALSE,
     confirmButtonText = "OK",
-    confirmButtonCol = "#3b8540",
+    confirmButtonCol = "#AEDEF4",
     timer = 0,
     imageUrl = "https://storage.googleapis.com/proudcity/elgl/uploads/2019/07/city-hall-selfie.png",
-    imageWidth = 150,
-    imageHeight = 150,
+    imageWidth = 100,
+    imageHeight = 100,
     animation = TRUE
   )
-  
-  
+
   sorted_tweets <- reactive({
     switch(input$sort_by,
            "Most recent"   = tweets %>% arrange(desc(created_at)),

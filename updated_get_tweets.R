@@ -5,7 +5,7 @@
 # Packages ----
 library(tidyverse)
 library(rtweet)
-library(googledrive)
+#library(googledrive)
 
 # Search Tweets ----
 tweets <- search_tweets(q = "#CityHallSelfie",
@@ -25,12 +25,11 @@ new_tweets <- tweets %>%
 # Create status url and clean up ----
 clean_tweets <- new_tweets %>% 
   mutate(status_url = paste0("https://twitter.com/", screen_name, "/status/", status_id)) %>%
-  select(status_url, screen_name, created_at, favorite_count, retweet_count, status_id) %>%
-  rbind(tweets_existing)
+  select(status_url, screen_name, created_at, favorite_count, retweet_count, status_id)
 
 # Append new data ----
 clean_tweets %>%
-  write_tsv(file.path("data", "tweets_master.tsv"), append = FALSE)
+  write_tsv(file.path("data", "tweets_master.tsv"), append = TRUE)
 
 # Extract photo endpoints ----
 photos <- new_tweets %>%
