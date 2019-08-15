@@ -15,7 +15,8 @@ tweets <- read_tsv(file.path("data", "tweets_master.tsv"))
 bb_dat <- tweets %>%
   arrange(created_at) %>%
   mutate(count = 1) %>%
-  mutate(Cumulative = cumsum(count))
+  mutate(Cumulative = cumsum(count)) %>%
+  filter(created_at > as.POSIXct("2019-08-15 00:00:00", tz = "UTC"))
 
 # Generate UI
 ui <- navbarPage(

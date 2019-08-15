@@ -15,7 +15,7 @@ tweets <- search_tweets(q = "#CityHallSelfie OR #CityHallSelfieday",
                         verbose = TRUE)
 
 # Read in existing tweets ----
-tweets_existing <- read_tsv(file.path("data", "tweets_master.tsv"), 
+tweets_existing <- read_tsv(file.path("data", "CopyOftweets_master.tsv"), 
                             col_types = cols(status_id = col_character()))
 
 # Remove tweets we have already captured ----
@@ -23,19 +23,23 @@ new_tweets <- tweets %>%
   filter(!status_id %in% tweets_existing$status_id)
 
 # Create status url and clean up ----
-clean_tweets <- new_tweets %>% 
+clean_tweets <- tweets %>% 
+  mutate(status_url = paste0("https://twitter.com/", screen_name, "/status/", status_id)) %>%
+  select(status_url, screen_name, created_at, favorite_count, retweet_count, status_id)
+
+new_tweets_clean <- new_tweets %>% 
   mutate(status_url = paste0("https://twitter.com/", screen_name, "/status/", status_id)) %>%
   select(status_url, screen_name, created_at, favorite_count, retweet_count, status_id)
 
 # Append new data ----
 clean_tweets %>%
-  write_tsv(file.path("data", "tweets_master.tsv"), append = TRUE)
+  write_tsv(file.path("data", "tweets_master.tsv"), append = FALSE)
+
+new_tweets_clean %>%
+  write_tsv(file.path("data", "CopyOftweets_master.tsv"), append = TRUE)
 
 # Managing large historical tweet data for analysis
-old_large_tweets <- read_rds("data/large_tweets.rds")
-
-new_tweets %>%
-  rbind(old_large_tweets) %>%
+tweets %>%
   saveRDS(file = "data/large_tweets.rds")
 
 # Extract photo endpoints ----
