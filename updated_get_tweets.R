@@ -8,7 +8,7 @@ library(rtweet)
 #library(googledrive)
 
 # Search Tweets ----
-tweets <- search_tweets(q = "#CityHallSelfie",
+tweets <- search_tweets(q = "#CityHallSelfie OR #CityHallSelfieday",
                         include_rts = FALSE,
                         n = 18000,
                         retryonratelimit = TRUE,
