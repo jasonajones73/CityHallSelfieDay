@@ -6,7 +6,7 @@ library(purrr)
 library(readr)
 library(stringr)
 library(magrittr)
-library(billboarder)
+library(highcharter)
 
 # Load data
 tweets <- read_tsv(file.path("data", "tweets_master.tsv"))
@@ -160,7 +160,10 @@ server <- function(input, output, session) {
              hcaes(x = datetime_to_timestamp(created_at), y = Cumulative),
              name = "Cumulative Tweets") %>%
       hc_xAxis(type = "datetime", title = list(text = NA)) %>%
-      hc_yAxis(title = list(text = NA))
+      hc_yAxis(title = list(text = NA)) %>%
+      hc_exporting(
+        enabled = TRUE
+      )
   })
   
 }
