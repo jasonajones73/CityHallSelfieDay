@@ -6,9 +6,16 @@ library(purrr)
 library(readr)
 library(stringr)
 library(magrittr)
+library(billboarder)
 
 # Load data
 tweets <- read_tsv(file.path("data", "tweets_master.tsv"))
+
+# Create chart data
+bb_dat <- tweets %>%
+  arrange(created_at) %>%
+  mutate(count = 1) %>%
+  mutate(Cumulative = cumsum(count))
 
 # Generate UI
 ui <- navbarPage(
@@ -80,7 +87,26 @@ ui <- navbarPage(
     column(1)
     )
   )
-  )
+  ), #tabPanel 1
+  
+  tabPanel(title = "Cumulative Tweets",
+           fluidPage(
+             fluidRow(
+               column(12,
+                      tags$br(),
+                      tags$br(),
+                      tags$br(),
+                      tags$br(),
+                      tags$br())
+             ),
+             fluidRow(
+               column(12,
+                      tags$p(
+                        highchartOutput(outputId = "bb_chart")
+                      ))
+             )
+           )
+           ) #tabPanel 2
 )
 
 embed_tweet <- function(tweet) {
@@ -127,6 +153,16 @@ server <- function(input, output, session) {
     tagList(map(transpose(sorted_tweets()), embed_tweet), 
             tags$script('twttr.widgets.load(document.getElementById("tweets"));'))
   })
+  
+  output$bb_chart <- renderHighchart({
+    bb_dat %>%
+      hchart(type = "line",
+             hcaes(x = datetime_to_timestamp(created_at), y = Cumulative),
+             name = "Cumulative Tweets") %>%
+      hc_xAxis(type = "datetime", title = list(text = NA)) %>%
+      hc_yAxis(title = list(text = NA))
+  })
+  
 }
 
 
