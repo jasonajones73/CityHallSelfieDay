@@ -7,15 +7,27 @@ library(readr)
 library(stringr)
 library(magrittr)
 library(highcharter)
+library(lubridate)
+
+# Highchart format
+hcoptslang <- getOption("highcharter.lang")
+hcoptslang$thousandsSep <- ","
+options(highcharter.lang = hcoptslang)
 
 # Load data
 tweets <- read_tsv(file.path("data", "tweets_master.tsv"))
 
 # Create chart data
 bb_dat <- tweets %>%
-  arrange(created_at) %>%
   mutate(count = 1) %>%
-  mutate(Cumulative = cumsum(count)) %>%
+  mutate(created_at = floor_date(created_at, unit = "hour")) %>%
+  group_by(created_at) %>%
+  summarise(Cumulative = sum(count), Favorites = sum(favorite_count), Retweets = sum(retweet_count)) %>%
+  ungroup() %>%
+  arrange(created_at) %>%
+  mutate(Cumulative = cumsum(Cumulative)) %>%
+  mutate(Retweets = cumsum(Retweets)) %>%
+  mutate(Favorites = cumsum(Favorites)) %>%
   filter(created_at > as.POSIXct("2019-08-15 00:00:00", tz = "UTC"))
 
 # Generate UI
@@ -105,6 +117,18 @@ ui <- navbarPage(
                       tags$p(
                         highchartOutput(outputId = "bb_chart")
                       ))
+             ),
+             fluidRow(
+               column(12,
+                      tags$p(
+                        highchartOutput(outputId = "retweet_chart")
+                      ))
+             ),
+             fluidRow(
+               column(12,
+                      tags$p(
+                        highchartOutput(outputId = "favorite_chart")
+                      ))
              )
            )
            ) #tabPanel 2
@@ -157,14 +181,41 @@ server <- function(input, output, session) {
   
   output$bb_chart <- renderHighchart({
     bb_dat %>%
-      hchart(type = "line",
+      hchart(type = "column",
              hcaes(x = datetime_to_timestamp(created_at), y = Cumulative),
              name = "Cumulative Tweets") %>%
       hc_xAxis(type = "datetime", title = list(text = NA)) %>%
       hc_yAxis(title = list(text = NA)) %>%
       hc_exporting(
         enabled = TRUE
-      )
+      ) %>%
+      hc_colors("#3b8540")
+  })
+  
+  output$retweet_chart <- renderHighchart({
+    bb_dat %>%
+      hchart(type = "column",
+             hcaes(x = datetime_to_timestamp(created_at), y = Retweets),
+             name = "Cumulative Retweets") %>%
+      hc_xAxis(type = "datetime", title = list(text = NA)) %>%
+      hc_yAxis(title = list(text = NA)) %>%
+      hc_exporting(
+        enabled = TRUE
+      ) %>%
+      hc_colors("#3b8540")
+  })
+  
+  output$favorite_chart <- renderHighchart({
+    bb_dat %>%
+      hchart(type = "column",
+             hcaes(x = datetime_to_timestamp(created_at), y = Favorites),
+             name = "Cumulative Favorites") %>%
+      hc_xAxis(type = "datetime", title = list(text = NA)) %>%
+      hc_yAxis(title = list(text = NA)) %>%
+      hc_exporting(
+        enabled = TRUE
+      ) %>%
+      hc_colors("#3b8540")
   })
   
 }
